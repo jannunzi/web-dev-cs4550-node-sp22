@@ -1,34 +1,44 @@
+const tuitsDao = require("../database/tuits/tuits-dao.js")
 let tuits = require("./tuits.json");
 
-const findAllTuits = (req, res) => {
+const findAllTuits = async (req, res) => {
+  const tuits = await tuitsDao.findAllTuits();
   res.json(tuits);
 }
-const createTuit = (req, res) => {
+const createTuit = async (req, res) => {
   const newTuit = req.body;
-  newTuit['_id'] = (new Date()).getTime()+'';
-  tuits = [
-    newTuit,
-    ...tuits
-  ];
+  await tuitsDao.createTuit(newTuit);
+  const tuits = await tuitsDao.findAllTuits();
+  // newTuit['_id'] = (new Date()).getTime()+'';
+  // tuits = [
+  //   newTuit,
+  //   ...tuits
+  // ];
   res.json(tuits);
 }
-const deleteTuit = (req, res) => {
+const deleteTuit = async (req, res) => {
   const tuitId = req.params['tid'];
-  tuits = tuits.filter(t => t._id !== tuitId);
+  // tuits = tuits.filter(t => t._id !== tuitId);
+  await tuitsDao.deleteTuit(tuitId)
+  const tuits = await tuitsDao.findAllTuits()
   res.json(tuits);
 }
-const likeTuit = (req, res) => {
+const likeTuit = async (req, res) => {
   const tuitId = req.params['tid'];
-  tuits = tuits.map(t => {
-    if (t._id === tuitId) {
-      return {
-        ...t,
-        likes: t.likes + 1
-      };
-    } else {
-      return t;
-    }
-  })
+  let tuit = await tuitsDao.findTuitById(tuitId)
+  tuit.likes++;
+  await tuitsDao.updateTuit(tuitId, tuit)
+  const tuits = tuitsDao.findAllTuits()
+  // tuits = tuits.map(t => {
+  //   if (t._id === tuitId) {
+  //     return {
+  //       ...t,
+  //       likes: t.likes + 1
+  //     };
+  //   } else {
+  //     return t;
+  //   }
+  // })
   res.json(tuits);
 }
 
@@ -47,16 +57,18 @@ const unlikeTuit = (req, res) => {
   res.json(tuits);
 }
 
-const updateTuit = (req, res) => {
+const updateTuit = async (req, res) => {
   const tuitId = req.params['tid'];
   const tuit = req.body;
-  tuits = tuits.map(t => {
-    if (t._id === tuitId) {
-      return tuit;
-    } else {
-      return t;
-    }
-  })
+  await tuitsDao.updateTuit(tuitId, tuit)
+  const tuits = await tuitsDao.findAllTuits()
+  // tuits = tuits.map(t => {
+  //   if (t._id === tuitId) {
+  //     return tuit;
+  //   } else {
+  //     return t;
+  //   }
+  // })
   res.json(tuits);
 }
 
