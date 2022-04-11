@@ -32,6 +32,8 @@ examples(app);
 const tuitsController = require("./controllers/tuits-controller")
 tuitsController(app);
 require("./controllers/users-controller")(app);
+require("./controllers/test-controller")(app);
+require("./controllers/movies-controller")(app);
 
 // app.get('/hello', (request, response) => {
 //   response.send("Hello World");
