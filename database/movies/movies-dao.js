@@ -1,16 +1,17 @@
 const moviesModel = require('./movies-model')
 
 const likeMovie = async (movie) => {
-  const existingMovie = await moviesModel.findOne({imdbID: movie.imdbID})
+  let existingMovie = await moviesModel.findOne({imdbID: movie.imdbID})
   if(existingMovie) {
     // update
     await moviesModel.updateOne({imdbID: movie.imdbID}, {
       $set: {likes: existingMovie.likes + 1}
     })
+    existingMovie.likes++
   } else {
     // insert
     try {
-      await moviesModel.create({
+      existingMovie = await moviesModel.create({
         // title: movie.title,
         // imdbID: movie.imdbID,
         // poster: movie.poster,
@@ -22,6 +23,7 @@ const likeMovie = async (movie) => {
       console.log(e)
     }
   }
+  return existingMovie
 }
 
 const findMovieByImdbID = async (imdbID) => {

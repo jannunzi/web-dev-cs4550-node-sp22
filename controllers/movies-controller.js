@@ -1,9 +1,9 @@
 const moviesDao = require('../database/movies/movies-dao')
 
 const likeMovie = async (req, res) => {
-  const movie = req.body
-  await moviesDao.likeMovie(movie)
-  res.sendStatus(200)
+  let movie = req.body
+  movie = await moviesDao.likeMovie(movie)
+  res.json(movie)
 }
 
 const findMovieByImdbID = async (req, res) => {
