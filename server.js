@@ -48,6 +48,7 @@ tuitsController(app);
 require("./controllers/users-controller")(app);
 require("./controllers/test-controller")(app);
 require("./controllers/movies-controller")(app);
+require("./database/comments/comments-controller")(app);
 
 // app.get('/hello', (request, response) => {
 //   response.send("Hello World");

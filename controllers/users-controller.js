@@ -76,8 +76,9 @@ const profile = (req, res) => {
   }
 }
 
-const signout = () => {
-
+const signout = (req, res) => {
+  req.session.destroy()
+  res.sendStatus(200)
 }
 
 module.exports = (app) => {
